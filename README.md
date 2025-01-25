@@ -16,7 +16,7 @@ This guide explains how to set up Nginx as a reverse proxy for a Node.js Express
 ## Step 1: Stop and Disable Conflicting Servers
 
 If other services like Apache are running, stop and disable them to free up port 80:
-
+ 
 ```bash
 sudo systemctl stop apache2
 sudo systemctl disable apache2
