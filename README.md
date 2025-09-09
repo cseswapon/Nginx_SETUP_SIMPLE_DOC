@@ -160,20 +160,21 @@ You're now ready to serve your Node.js Express app with Nginx!
 ```bash
    const express = require("express");
    const app = express();
-
-   // serve up production assets
+   
    const path = require("path");
-   app.use(express.static(path.join(__dirname, "/")));
-
-   // let the react app to handle any unknown routes
-   // serve up the index.html if express does'nt recognize the route
-   app.get("*", (req, res) => {
-      res.sendFile(path.resolve(__dirname, "index.html"));
+   app.use(express.static(path.join(__dirname, "dist")));
+   
+   
+   app.get("/api/example", (req, res) => {
+     res.json({ message: "This is an API route." });
    });
-
-   // if not in production use the port 5000
-   const PORT = 5000;
-
-   // console.log("server started on port:", PORT);
-   app.listen(PORT);
+   
+   app.get("*", (req, res) => {
+     res.sendFile(path.resolve(__dirname, "dist", "index.html"));
+   });
+   
+   app.listen(8080, () => {
+       console.log("Server is running on http://localhost:8080");
+       }
+   );
 ```
