@@ -1,6 +1,6 @@
 # Setting Up SSL with Certbot for Nginx + Node.js
 
-This guide explains how to secure your Node.js Express application with **Let's Encrypt SSL certificates** using **Certbot** and how to automatically renew them.
+This guide explains how to secure your Node.js Express application with **Let's Encrypt SSL certificates** using **Certbot** and how to automatically renew them. 
 
 ---
 
