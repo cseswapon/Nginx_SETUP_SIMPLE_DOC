@@ -1,142 +1,191 @@
+# 🚀 MongoDB Setup Guide (VPS / Ubuntu)
 
-## Setup MongoDB on VPS
+This guide explains how to install, secure, and configure **MongoDB 8.0** on an Ubuntu VPS step by step.
 
+---
 
-Install MongoDB
+## 📌 Prerequisites
+
+* Ubuntu 22.04 (Jammy)
+* Root or sudo access
+* Internet connection
+
+---
+
+## 📦 Install MongoDB
+
+### 1️⃣ Install Required Packages
 
 ```bash
-  sudo apt-get install gnupg curl
+sudo apt-get install gnupg curl
 ```
+
+### 2️⃣ Add MongoDB GPG Key
+
 ```bash
-  curl -fsSL https://www.mongodb.org/static/pgp/server-8.0.asc | \
-   sudo gpg -o /usr/share/keyrings/mongodb-server-8.0.gpg \
-   --dearmor
+curl -fsSL https://www.mongodb.org/static/pgp/server-8.0.asc | \
+sudo gpg -o /usr/share/keyrings/mongodb-server-8.0.gpg --dearmor
 ```
-Create the MongoDB list file.
+
+### 3️⃣ Add MongoDB Repository
 
 ```bash
 echo "deb [ arch=amd64,arm64 signed-by=/usr/share/keyrings/mongodb-server-8.0.gpg ] https://repo.mongodb.org/apt/ubuntu jammy/mongodb-org/8.0 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-8.0.list
 ```
-Update package lists and install MongoDB.
+
+### 4️⃣ Update & Install MongoDB
 
 ```bash
-  sudo apt-get update
+sudo apt-get update
+sudo apt-get install -y mongodb-org
 ```
 
-```bash
-  sudo apt-get install -y mongodb-org
-```
-Start and enable MongoDB service.
+---
+
+## ▶️ Start & Enable MongoDB Service
 
 ```bash
-  sudo systemctl daemon-reload
-```
-```bash
-  sudo systemctl start mongod
-```
-```bash
-  sudo systemctl enable mongod
-```
-Verify that MongoDB has started successfully.
-```bash
-  sudo systemctl status mongod
-```
-MongoDB URI to connect with projects.
-```bash
-  mongodb://127.0.0.1:27017
+sudo systemctl daemon-reload
+sudo systemctl start mongod
+sudo systemctl enable mongod
 ```
 
-### Configure MongoDB Authentication ( Optional )
+### ✅ Verify MongoDB Status
 
-#### Allowing MongoDB through firewall
+```bash
+sudo systemctl status mongod
+```
 
-Enable firewall
+---
+
+## 🔗 Default MongoDB Connection URI
+
+```text
+mongodb://127.0.0.1:27017
+```
+
+---
+
+## 🔐 (Optional) Configure MongoDB Security & Authentication
+
+### 🔥 Configure Firewall (UFW)
+
+Enable firewall:
 
 ```bash
 sudo ufw enable
 ```
 
-Check Port is Allowed through Firewall
-```bash
-  sudo ufw status
-```
-
-If Port is not Allowed then Allow it through Firewall
-```bash
-  sudo ufw allow 27017
-```
-```bash
-   sudo ufw allow 'OpenSSH'
-```
-Restart MongoDB
-```bash
-  sudo service mongod restart
-```
-#### Secure MongoDB by setting up Super User. 
-
-Connect to MongoDB shell
-```bash
-  mongosh
-```
-Show database
+Check firewall status:
 
 ```bash
-  show dbs
+sudo ufw status
 ```
 
-Change to admin database
+Allow MongoDB & SSH ports:
 
 ```bash
-  use admin
+sudo ufw allow 27017
+sudo ufw allow 'OpenSSH'
 ```
 
-Create superuser with all privileges
+Restart MongoDB:
 
 ```bash
-  db.createUser({user: "username-here" , pwd: passwordPrompt() , roles: ["root"]})
+sudo service mongod restart
 ```
 
-Now Exit mongosh shell
+---
 
-```bash
-  .exit
-```
+## 👤 Create MongoDB Super User (Admin)
 
-Enable Authorization removing comment
+### 1️⃣ Open Mongo Shell
 
 ```bash
-  sudo nano /etc/mongod.conf
+mongosh
+```
+
+### 2️⃣ Switch to Admin Database
+
+```bash
+use admin
+```
+
+### 3️⃣ Create Root User
+
+```bash
+db.createUser({
+  user: "username-here",
+  pwd: passwordPrompt(),
+  roles: ["root"]
+})
+```
+
+Exit shell:
+
+```bash
+.exit
+```
+
+---
+
+## 🔒 Enable MongoDB Authorization
+
+Edit MongoDB config file:
+
+```bash
+sudo nano /etc/mongod.conf
+```
+
+Uncomment / add:
+
+```yaml
+security:
+  authorization: enabled
+```
+
+Restart MongoDB:
+
+```bash
+sudo service mongod restart
+```
+
+---
+
+## 🔑 Login as Super User
+
+```bash
+mongosh --port 27017 --authenticationDatabase "admin" -u "username-here" -p "password-here"
+```
+
+---
+
+## 🗄️ Create Database & Project User
+
+```bash
+use database_name
 ```
 
 ```bash
-  security:
-    authorization: enabled
-```
-Restart MongoDB
-```bash
-  sudo service mongod restart
-```
-
-To Access Mongo Shell as Super User use this command:
-```bash
-  mongosh --port 27017 --authenticationDatabase "admin" -u "username-here" -p "password-here"
+db.createUser({
+  user: "username_here",
+  pwd: passwordPrompt(),
+  roles: [{ role: "readWrite", db: "database_name" }]
+})
 ```
 
-Create Database & User for project:
-```bash
-  use database_name
-```
-```bash
-  db.createUser({user:"username_here", pwd:passwordPrompt(), roles:[{role:"readWrite", db:"database_name"}]})
-```
-
-Now Exit mongosh shell
+Exit shell:
 
 ```bash
-  .exit
+.exit
 ```
 
-MongoDB URI to Connect with projects:
-```bash
-  mongodb://username-here:password-here@127.0.0.1:27017/database_name
+---
+
+## 🔗 MongoDB URI for Project Connection
+
+```text
+mongodb://username-here:password-here@127.0.0.1:27017/database_name
 ```
+
+---
