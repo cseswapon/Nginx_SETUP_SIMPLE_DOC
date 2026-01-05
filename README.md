@@ -1,111 +1,101 @@
-# VPS Setup & Node.js Environment Setup Guide
+# 🚀 VPS Setup & Node.js Production Environment
 
-This guide provides step-by-step instructions to set up a **VPS server** (Ubuntu), and configure **Node.js**, **NVM**, **Git**, and other essential tools.
+**(NVM · PM2 · Git)**
 
----
+This guide provides a **professional, production-ready approach** to setting up a **Node.js environment** on an **Ubuntu VPS** using **NVM** and **PM2**.
 
-## Prerequisites
-
-1. A **VPS** running **Ubuntu** or a similar Linux distribution.
-2. **Root** or **sudo** access to the server.
-3. Basic knowledge of using the Linux terminal.
+> ❌ Apache2 is **not required**
+> ✅ Designed for **Node.js + Nginx + PM2** architecture
 
 ---
 
-## 1. Initial Server Setup
+## 📌 System Requirements
 
-### Update and Upgrade System
+* Ubuntu 20.04 / 22.04 LTS
+* Root or sudo access
+* Basic Linux terminal knowledge
 
-It's important to ensure your system is up to date:
+---
+
+## 🔹 1. System Update & Base Packages
+
+Always keep the system updated before installing anything.
 
 ```bash
 sudo apt update && sudo apt upgrade -y
 ```
 
----
-
-## 2. Set File Permissions
-
-Create a new file and set the appropriate permissions:
-
-### Create a File
+Install essential utilities:
 
 ```bash
-touch myfile.txt
-```
-
-### Change Permissions
-
-```bash
-chmod 644 myfile.txt
-```
-
-### Change Ownership (to a specific user)
-
-```bash
-sudo chown username:username myfile.txt
+sudo apt install -y curl wget git build-essential
 ```
 
 ---
 
-## 3. Basic Networking and Checking Running Ports
+## 🔹 2. Disable Unnecessary Services (Apache2)
 
-### List Open Ports
+Apache2 is **not used** in modern Node.js production deployments.
 
-You can check which ports are being used by running:
+### Check Apache2 status (if installed)
 
 ```bash
-sudo netstat -tuln
+sudo systemctl status apache2
 ```
 
-### Disable Unused Services
-
-If you don't need certain services (e.g., Apache), disable them:
+### Stop & disable Apache2
 
 ```bash
 sudo systemctl stop apache2
 sudo systemctl disable apache2
 ```
 
+### Optional: Remove Apache2 completely
+
+```bash
+sudo apt purge apache2 apache2-utils apache2-bin apache2.2-common -y
+sudo apt autoremove -y
+```
+
 ---
 
-## 4. Installing NVM, Node.js, and Git
+## 🔹 3. Install NVM (Node Version Manager)
 
-### Method 1: Installing Node.js via NVM (Recommended)
-
-**NVM** (Node Version Manager) is the best way to manage Node.js versions.
-
-#### Install NVM
-
-Run this command to install NVM:
+NVM allows safe management of multiple Node.js versions and is **recommended for production**.
 
 ```bash
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.5/install.sh | bash
 ```
 
-#### Load NVM into Current Session
+Load NVM into the current shell:
 
 ```bash
 source ~/.bashrc
 ```
 
-#### Install Node.js Using NVM
+Verify installation:
 
-To install the latest LTS version of Node.js:
+```bash
+nvm -v
+```
+
+---
+
+## 🔹 4. Install Node.js (LTS)
+
+Install the latest **LTS version** of Node.js:
 
 ```bash
 nvm install --lts
 ```
 
-Or, install a specific version (e.g., v18):
+Set it as the default version:
 
 ```bash
-nvm install 18
+nvm alias default lts/*
 ```
 
-#### Verify Installation
-
-Check the installed versions of **Node.js** and **npm**:
+Verify:
 
 ```bash
 node -v
@@ -114,15 +104,15 @@ npm -v
 
 ---
 
-### Installing Git
+## 🔹 5. Install Git
 
-Install **Git** to use version control and clone repositories:
+Git is required for version control and deployment.
 
 ```bash
 sudo apt install git -y
 ```
 
-Verify Git installation:
+Verify:
 
 ```bash
 git --version
@@ -130,14 +120,110 @@ git --version
 
 ---
 
-## 5. Helpful Links
+## 🔹 6. Install PM2 (Process Manager)
 
-For detailed setup guides, troubleshooting, and configuration, refer to the following resources:
+PM2 ensures:
 
-1. [Nginx + Node.js Setup](https://github.com/cseswapon/Nginx_SETUP_SIMPLE_DOC/blob/main/NGINX_NODE_SETUP.md)
-2. [Nginx + SSL + Certbot Setup](https://github.com/cseswapon/Nginx_SETUP_SIMPLE_DOC/blob/main/NGINX_NODE_SSL_CERTBOT.md)
-3. [Nginx Troubleshooting](https://github.com/cseswapon/Nginx_SETUP_SIMPLE_DOC/blob/main/NGINX_NODE_TROUBLESHOOTING.md)
-4. [Redis Setup](https://github.com/cseswapon/Nginx_SETUP_SIMPLE_DOC/blob/main/REDIS_SETUP.md)
-5. [MongoDB Setup](https://github.com/cseswapon/Nginx_SETUP_SIMPLE_DOC/blob/main/VPS_MONGODB_SETUP.md)
+* Background execution
+* Auto-restart on crash
+* Startup on server reboot
+
+```bash
+npm install -g pm2
+```
+
+Verify installation:
+
+```bash
+pm2 -v
+```
 
 ---
+
+## 🔹 7. Run Node.js Application with PM2
+
+### Start application
+
+```bash
+pm2 start app.js --name my-app
+```
+
+### View running processes
+
+```bash
+pm2 list
+```
+
+### Logs
+
+```bash
+pm2 logs my-app
+```
+
+### Stop / Restart / Delete
+
+```bash
+pm2 stop my-app
+pm2 restart my-app
+pm2 delete my-app
+```
+
+---
+
+## 🔹 8. Enable PM2 on Server Reboot
+
+Generate startup script:
+
+```bash
+pm2 startup
+```
+
+Run the command shown in the output.
+
+Save current process list:
+
+```bash
+pm2 save
+```
+
+---
+
+## 🔹 9. Common PM2 Utilities
+
+```bash
+pm2 logs
+pm2 monit
+pm2 flush
+```
+
+---
+
+## 🔹 10. Recommended Production Stack
+
+| Component       | Purpose             |
+| --------------- | ------------------- |
+| Node.js (LTS)   | Application runtime |
+| PM2             | Process manager     |
+| Nginx           | Reverse proxy       |
+| SSL (Certbot)   | HTTPS               |
+| MongoDB / Redis | Database / Cache    |
+
+---
+
+## 🔹 11. Reference Setup Guides
+
+* **Nginx + Node.js**
+  [https://github.com/cseswapon/Nginx_SETUP_SIMPLE_DOC/blob/main/NGINX_NODE_SETUP.md](https://github.com/cseswapon/Nginx_SETUP_SIMPLE_DOC/blob/main/NGINX_NODE_SETUP.md)
+
+* **Nginx + SSL (Certbot)**
+  [https://github.com/cseswapon/Nginx_SETUP_SIMPLE_DOC/blob/main/NGINX_NODE_SSL_CERTBOT.md](https://github.com/cseswapon/Nginx_SETUP_SIMPLE_DOC/blob/main/NGINX_NODE_SSL_CERTBOT.md)
+
+* **Nginx Troubleshooting**
+  [https://github.com/cseswapon/Nginx_SETUP_SIMPLE_DOC/blob/main/NGINX_NODE_TROUBLESHOOTING.md](https://github.com/cseswapon/Nginx_SETUP_SIMPLE_DOC/blob/main/NGINX_NODE_TROUBLESHOOTING.md)
+
+* **Redis Setup**
+  [https://github.com/cseswapon/Nginx_SETUP_SIMPLE_DOC/blob/main/REDIS_SETUP.md](https://github.com/cseswapon/Nginx_SETUP_SIMPLE_DOC/blob/main/REDIS_SETUP.md)
+
+* **MongoDB Setup**
+  [https://github.com/cseswapon/Nginx_SETUP_SIMPLE_DOC/blob/main/VPS_MONGODB_SETUP.md](https://github.com/cseswapon/Nginx_SETUP_SIMPLE_DOC/blob/main/VPS_MONGODB_SETUP.md)
+
