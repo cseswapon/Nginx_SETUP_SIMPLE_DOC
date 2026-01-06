@@ -227,3 +227,7 @@ pm2 flush
 * **MongoDB Setup**
   [https://github.com/cseswapon/Nginx_SETUP_SIMPLE_DOC/blob/main/VPS_MONGODB_SETUP.md](https://github.com/cseswapon/Nginx_SETUP_SIMPLE_DOC/blob/main/VPS_MONGODB_SETUP.md)
 
+
+* **GitHub SSH Setup**
+
+[GitHub Setup](https://github.com/cseswapon/github-multi-ssh-setup)
