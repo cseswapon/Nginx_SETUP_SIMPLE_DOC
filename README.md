@@ -213,19 +213,19 @@ pm2 flush
 ## 🔹 11. Reference Setup Guides
 
 * **Nginx + Node.js**
-  [https://github.com/cseswapon/Nginx_SETUP_SIMPLE_DOC/blob/main/NGINX_NODE_SETUP.md](https://github.com/cseswapon/Nginx_SETUP_SIMPLE_DOC/blob/main/NGINX_NODE_SETUP.md)
+  [Node js & Nginx Setup](https://github.com/cseswapon/VPS_NODE_SETUP_GUIDE/blob/main/NGINX_NODE_SETUP.md)
 
 * **Nginx + SSL (Certbot)**
-  [https://github.com/cseswapon/Nginx_SETUP_SIMPLE_DOC/blob/main/NGINX_NODE_SSL_CERTBOT.md](https://github.com/cseswapon/Nginx_SETUP_SIMPLE_DOC/blob/main/NGINX_NODE_SSL_CERTBOT.md)
+  [Nginx Chartbot setup](https://github.com/cseswapon/VPS_NODE_SETUP_GUIDE/blob/main/NGINX_NODE_SSL_CERTBOT.md)
 
 * **Nginx Troubleshooting**
-  [https://github.com/cseswapon/Nginx_SETUP_SIMPLE_DOC/blob/main/NGINX_NODE_TROUBLESHOOTING.md](https://github.com/cseswapon/Nginx_SETUP_SIMPLE_DOC/blob/main/NGINX_NODE_TROUBLESHOOTING.md)
+  [Nginx Troubleshooting Setup](https://github.com/cseswapon/VPS_NODE_SETUP_GUIDE/blob/main/NGINX_NODE_TROUBLESHOOTING.md)
 
 * **Redis Setup**
-  [https://github.com/cseswapon/Nginx_SETUP_SIMPLE_DOC/blob/main/REDIS_SETUP.md](https://github.com/cseswapon/Nginx_SETUP_SIMPLE_DOC/blob/main/REDIS_SETUP.md)
+  [Redis setup](https://github.com/cseswapon/VPS_NODE_SETUP_GUIDE/blob/main/REDIS_SETUP.md)
 
 * **MongoDB Setup**
-  [https://github.com/cseswapon/Nginx_SETUP_SIMPLE_DOC/blob/main/VPS_MONGODB_SETUP.md](https://github.com/cseswapon/Nginx_SETUP_SIMPLE_DOC/blob/main/VPS_MONGODB_SETUP.md)
+  [MongoDB Setup](https://github.com/cseswapon/VPS_NODE_SETUP_GUIDE/blob/main/VPS_MONGODB_SETUP.md)
 
 
 * **GitHub SSH Setup**
