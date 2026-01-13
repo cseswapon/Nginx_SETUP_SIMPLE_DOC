@@ -29,7 +29,7 @@ sudo apt install certbot python3-certbot-nginx -y
 Request a free Let's Encrypt SSL certificate for your domain:
 
 ```bash
-sudo certbot --nginx -d your-domain.com -d www.your-domain.com
+sudo certbot --nginx -d your-domain.com -d www.your-domain.com --register-unsafely-without-email
 ```
 
 * Replace `your-domain.com` with your actual domain.
